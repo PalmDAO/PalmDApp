@@ -1,3 +1,4 @@
+@use '../../../assets/styles/variables.scss' as variable;
 .dapp-sidebar {
   height: 100vh;
   min-width: 280px;
@@ -45,8 +46,10 @@
         }
       }
 
-      .button-dapp-menu{
+      .button-dapp-menu {
         .dapp-menu-item{
+          overflow: hidden;
+          position: relative;
           width: 100%;
           display: inline-flex;
           align-items: center;
@@ -64,12 +67,38 @@
             color: rgba(255, 255, 255, 0.8);
             font-family: Montserrat SemiBold;
           }
+
+          &::before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            width: 0;
+            transition: variable.$general-transition;
+          }
+          &:hover::before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            width: 3px;
+            background: var(--palm-primary);
+          }
+        }
+
+        &.active .dapp-menu-item::before {
+          content: '';
+          height: 100%;
+          left: 0;
+          position: absolute;
+          width: 3px;
+          background: var(--palm-primary);
         }
       }
 
       .button-dapp-menu.active {
         .dapp-menu-item{
-          background: rgb(0, 53, 67);
+          background: var(--palm-highlight);
 
           .drawer-icon {
             fill: white;
@@ -140,6 +169,7 @@
   }
 
   .social-row {
+    border-top: 1px solid #003543;
     display: flex;
     flex-flow: row;
     justify-content: space-evenly;
@@ -158,11 +188,11 @@
 
 .MuiDrawer-root{
   .MuiPaper-root{
-    border-right: 1px solid rgb(0, 53, 67);
+    border-right: 1px solid var(--palm-highlight);
     z-index: 7;
 
     @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-      background: rgba(0,30,38, 1.0);
+      background: var(--palm-darkest);
       backdrop-filter: blur(40px);
     }
   
