@@ -6,15 +6,12 @@
   .stake-card{
     position: relative;
     z-index: 2;
+    background: #0e2934;
+    border: 2px solid #123442;
+    border-radius: 8px;
     
     @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-      background: rgba(36, 39, 41, 0.1);
       backdrop-filter: blur(40px);
-    }
-  
-    /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
-    @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-      background: #181B1C;
     }
 
     border-radius: 10px;

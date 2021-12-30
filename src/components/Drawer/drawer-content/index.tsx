@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Social from "./social";
-import StakeIcon from "../../../assets/icons/stake.svg";
-import BondIcon from "../../../assets/icons/bond.svg";
-import WonderlandIcon from "../../../assets/icons/wonderland-nav-header.svg";
-import DashboardIcon from "../../../assets/icons/dashboard.svg";
+import StakeIcon from "../../../assets/icons/icons8-sheets.svg";
+import BondIcon from "../../../assets/icons/icons8-cooling.svg";
+import palmtreeIcon from "../../../assets/icons/palmtree.png";
+import { ReactComponent as DashboardIcon } from "../../../assets/icons/icons8-dashboard-layout.svg";
 import { trim, shorten } from "../../../helpers";
 import { useAddress } from "../../../hooks";
 import useBonds from "../../../hooks/bonds";
@@ -12,7 +12,7 @@ import { Link } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import "./drawer-content.scss";
 import DocsIcon from "../../../assets/icons/stake.svg";
-import GlobeIcon from "../../../assets/icons/wonderglobe.svg";
+import SalesIcon from "../../../assets/icons/icons8-sales.svg";
 import classnames from "classnames";
 
 function NavContent() {
@@ -41,7 +41,7 @@ function NavContent() {
         <div className="dapp-sidebar">
             <div className="branding-header">
                 <Link href="https://wonderland.money" target="_blank">
-                    <img alt="" src={WonderlandIcon} />
+                    <img height={50} width={50} alt="" src={palmtreeIcon} />
                 </Link>
 
                 {address && (
@@ -64,7 +64,7 @@ function NavContent() {
                         className={classnames("button-dapp-menu", { active: isActive })}
                     >
                         <div className="dapp-menu-item">
-                            <img alt="" src={DashboardIcon} />
+                            <DashboardIcon className="drawer-icon"></DashboardIcon>
                             <p>Dashboard</p>
                         </div>
                     </Link>
@@ -98,7 +98,10 @@ function NavContent() {
                         </div>
                     </Link>
 
-                    <div className="bond-discounts">
+                    {/*
+                    TODO: Talk with team about removing this from drawer
+                     */}
+                    {/* <div className="bond-discounts">
                         <p>Mint discounts</p>
                         {bonds.map((bond, i) => (
                             <Link component={NavLink} to={`/mints/${bond.name}`} key={i} className={"bond"}>
@@ -112,7 +115,7 @@ function NavContent() {
                                 )}
                             </Link>
                         ))}
-                    </div>
+                    </div> */}
 
                     <Link
                         component={NavLink}
@@ -123,7 +126,7 @@ function NavContent() {
                         className={classnames("button-dapp-menu", { active: isActive })}
                     >
                         <div className="dapp-menu-item">
-                            <img alt="" src={GlobeIcon} />
+                            <img alt="" src={SalesIcon} />
                             <p>Calculator</p>
                         </div>
                     </Link>
@@ -133,9 +136,6 @@ function NavContent() {
                 <Link href="https://wonderland.gitbook.io/wonderland/" target="_blank">
                     <img alt="" src={DocsIcon} />
                     <p>Docs</p>
-                </Link>
-                <Link href="https://legacy.wonderland.money/" target="_blank">
-                    <p>Legacy website</p>
                 </Link>
             </div>
             <Social />

@@ -1,7 +1,9 @@
 .connect-button{
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0px 0px 10px rgba(44, 39, 109, 0.1);
+    background: transparent;
     border-radius: 10px;
+    border-color: rgb(0, 220, 130);
+    border-width: 1px;
+    border-style: solid;
     padding: 9px 20px;
     cursor: pointer;
 
@@ -16,7 +18,14 @@
     p{
       font-family: Montserrat SemiBold;
       font-weight: 600;
-      font-size: 18px;
-      color: #FFFFFF;
+      font-size: 14px;
+      color: rgba(255,255,255, 0.9);
+    }
+  }
+
+  .connect-button:hover {
+    background: rgb(0, 220, 130);
+    p {
+      color: black;
     }
   }
