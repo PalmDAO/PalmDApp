@@ -1,5 +1,5 @@
 # [PALM Frontend](https://palmtreeclub.fianance/)
-This is the front-end repo for Wonderland. 
+This is the front-end repo for PalmTree. 
 
 ##  🔧 Setting up Local Development
 
