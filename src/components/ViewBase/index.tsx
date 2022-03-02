@@ -7,6 +7,7 @@ import MobileDrawer from "../Drawer/mobile-drawer";
 import Drawer from "../Drawer";
 import { cubesImage } from "src/constants/img";
 import Messages from "../Messages";
+import NavHeader from "../NavHeader/NavHeader";
 
 interface IViewBaseProps {
     children: React.ReactNode;
@@ -53,6 +54,7 @@ function ViewBase({ children }: IViewBaseProps) {
     return (
         <div className="view-base-root">
             <Messages />
+            <NavHeader></NavHeader>
             <Header drawe={!isSmallerScreen} handleDrawerToggle={handleDrawerToggle} />
             <div className={classes.drawer}>
                 <Hidden mdUp>
