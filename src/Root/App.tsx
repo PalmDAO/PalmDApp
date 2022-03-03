@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { Route, Redirect, Switch } from "react-router-dom";
+import { Route, Redirect, Switch, useLocation } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddress, useWeb3Context } from "../hooks";
 import { calcBondDetails } from "../store/slices/bond-slice";
@@ -104,38 +105,44 @@ function App() {
 
     if (isAppLoading) return <Loading />;
 
+    let location = useLocation();
+
     return (
         <ViewBase>
-            <Switch>
-                <Route exact path="/dashboard">
-                    <Dashboard />
-                </Route>
+            <TransitionGroup>
+                <CSSTransition key={location.pathname} classNames="fade" timeout={400}>
+                    <Switch location={location}>
+                        <Route path="/dashboard" key="/dashboard" exact>
+                            <Dashboard />
+                        </Route>
 
-                <Route exact path="/">
-                    <Redirect to="/stake" />
-                </Route>
+                        <Route exact path="/" key="/">
+                            <Redirect to="/stake" />
+                        </Route>
 
-                <Route path="/stake">
-                    <Stake />
-                </Route>
+                        <Route path="/stake" key="/stake">
+                            <Stake />
+                        </Route>
 
-                <Route path="/mints">
-                    {bonds.map(bond => {
-                        return (
-                            <Route exact key={bond.name} path={`/mints/${bond.name}`}>
-                                <Bond bond={bond} />
-                            </Route>
-                        );
-                    })}
-                    <ChooseBond />
-                </Route>
+                        <Route path="/mints" key="/mints">
+                            {bonds.map(bond => {
+                                return (
+                                    <Route exact key={bond.name} path={`/mints/${bond.name}`}>
+                                        <Bond bond={bond} />
+                                    </Route>
+                                );
+                            })}
+                            <ChooseBond />
+                        </Route>
 
-                <Route path="/calculator">
-                    <Calculator />
-                </Route>
+                        <Route path="/calculator" key="/calculator">
+                            <Calculator />
+                        </Route>
 
-                <Route component={NotFound} />
-            </Switch>
+                        <Route key="notfound" component={NotFound} />
+                    </Switch>
+                </CSSTransition>
+            </TransitionGroup>
         </ViewBase>
     );
 }

@@ -23,71 +23,71 @@ function ChooseBond() {
 
     return (
         <div className="choose-bond-view">
-            <Zoom in={true}>
-                <div className="choose-bond-view-card">
-                    <div className="choose-bond-view-card-header">
-                        <p className="choose-bond-view-card-title"> Mint (🫖, 🫖)</p>
-                    </div>
+            {/* <Zoom in={true}> */}
+            <div className="choose-bond-view-card">
+                <div className="choose-bond-view-card-header">
+                    <p className="choose-bond-view-card-title"> Mint (🫖, 🫖)</p>
+                </div>
 
-                    <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
-                        <Grid item xs={12} sm={6}>
-                            <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">Treasury Balance</p>
-                                <p className="choose-bond-view-card-metrics-value">
-                                    {isAppLoading ? (
-                                        <Skeleton width="180px" />
-                                    ) : (
-                                        new Intl.NumberFormat("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                            maximumFractionDigits: 0,
-                                            minimumFractionDigits: 0,
-                                        }).format(treasuryBalance)
-                                    )}
-                                </p>
-                            </Box>
-                        </Grid>
-
-                        <Grid item xs={12} sm={6}>
-                            <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">PALM Price</p>
-                                <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}</p>
-                            </Box>
-                        </Grid>
+                <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
+                    <Grid item xs={12} sm={6}>
+                        <Box textAlign="center">
+                            <p className="choose-bond-view-card-metrics-title">Treasury Balance</p>
+                            <p className="choose-bond-view-card-metrics-value">
+                                {isAppLoading ? (
+                                    <Skeleton width="180px" />
+                                ) : (
+                                    new Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        maximumFractionDigits: 0,
+                                        minimumFractionDigits: 0,
+                                    }).format(treasuryBalance)
+                                )}
+                            </p>
+                        </Box>
                     </Grid>
 
-                    {!isSmallScreen && (
-                        <Grid container item>
-                            <TableContainer className="choose-bond-view-card-table">
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="center">
-                                                <p className="choose-bond-view-card-table-title">Mint</p>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <p className="choose-bond-view-card-table-title">Price</p>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <p className="choose-bond-view-card-table-title">ROI</p>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <p className="choose-bond-view-card-table-title">Purchased</p>
-                                            </TableCell>
-                                            <TableCell align="right"></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {bonds.map(bond => (
-                                            <BondTableData key={bond.name} bond={bond} />
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                    )}
-                </div>
-            </Zoom>
+                    <Grid item xs={12} sm={6}>
+                        <Box textAlign="center">
+                            <p className="choose-bond-view-card-metrics-title">PALM Price</p>
+                            <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}</p>
+                        </Box>
+                    </Grid>
+                </Grid>
+
+                {!isSmallScreen && (
+                    <Grid container item>
+                        <TableContainer className="choose-bond-view-card-table">
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">
+                                            <p className="choose-bond-view-card-table-title">Mint</p>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <p className="choose-bond-view-card-table-title">Price</p>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <p className="choose-bond-view-card-table-title">ROI</p>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <p className="choose-bond-view-card-table-title">Purchased</p>
+                                        </TableCell>
+                                        <TableCell align="right"></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {bonds.map(bond => (
+                                        <BondTableData key={bond.name} bond={bond} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                )}
+            </div>
+            {/* </Zoom> */}
 
             {isSmallScreen && (
                 <div className="choose-bond-view-card-container">

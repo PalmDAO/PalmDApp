@@ -1,8 +1,8 @@
 {
-  "short_name": "Wonderland",
+  "short_name": "PalmDAO",
   "start_url": ".",
   "homepage": "./",
-  "name": "Wonderland",
+  "name": "PalmDAO",
   "launch_path": "/public/index.html",
   "icons": [
     {

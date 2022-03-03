@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./view-base.scss";
 import Header from "../Header";
-import { Hidden, makeStyles, useMediaQuery } from "@material-ui/core";
+import { makeStyles, useMediaQuery } from "@material-ui/core";
 import { DRAWER_WIDTH, TRANSITION_DURATION } from "../../constants/style";
 import Messages from "../Messages";
 import NavHeader from "../NavHeader/NavHeader";
@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
         }),
         height: "100%",
         overflow: "auto",
-        marginLeft: DRAWER_WIDTH,
     },
     contentShift: {
         transition: theme.transitions.create("margin", {
