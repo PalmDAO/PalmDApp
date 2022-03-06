@@ -1,0 +1,31 @@
+.connect-button {
+  background: transparent;
+  border-radius: 10px;
+  border-color: var(--palm-primary);
+  border-width: 1px;
+  border-style: solid;
+  padding: 9px 20px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  .connect-button-progress {
+    margin-left: 10px;
+    margin-top: 4px;
+  }
+
+  p {
+    font-family: Montserrat SemiBold;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.connect-button:hover {
+  background: var(--palm-primary);
+  p {
+    color: black;
+  }
+}
