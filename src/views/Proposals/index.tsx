@@ -15,8 +15,32 @@ import { PalmTableData, ColumnData } from "../../components/PalmTable/PalmTableI
 import PalmTabs from "src/components/PalmTabs/PalmTabs";
 import PalmButton from "src/components/PalmButton/PalmButton";
 import { createProposal } from "./Proposals.service";
+import { ethers, utils } from "ethers";
+import { governorAbi, tokenAbi } from "./proposals.abi";
+let Web3 = require("web3");
+let web3 = new Web3(Web3.givenProvider);
 
 function Proposals() {
+    const provider = ethers.providers.getDefaultProvider("http://127.0.0.1:9545");
+    const governorAddress = "0x4a6D7Fd3F85fd189f90f4bB7907297cC623c0EAD";
+    let whaleGovernor = new web3.eth.Contract(JSON.parse(governorAbi), governorAddress);
+    //Any new, incoming events
+    whaleGovernor.events
+        .ProposalCreated({}, () => console.log("Received proposal creation"))
+        //Has a field called returnValues which maps to the 8 arguments from ProposalCreated
+        //See https://docs.openzeppelin.com/contracts/4.x/api/governance#IGovernor-ProposalCreated-uint256-address-address---uint256---string---bytes---uint256-uint256-string-
+        //Only fires on successful events.  Inspect why it happens a lot
+        .on("data", (event: any) => {
+            console.log(event);
+        })
+        //Only fires on errors for ProposalCreated
+        .on("error", (error: any) => {
+            console.log("proposal errored");
+        });
+
+    //All past events
+    //Inspect why events here is alwasy length 1
+    whaleGovernor.getPastEvents("ProposalCreated", { fromBlock: 0, toBlock: "latest" }, (error: any, events: any) => console.log(events));
     const app = useSelector<IReduxState, IAppSlice>(state => state.app);
     const [value, setValue] = React.useState(0);
 
