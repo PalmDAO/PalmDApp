@@ -23,7 +23,7 @@ const NavHeader = () => {
                 history.push("/proposals");
                 break;
             case 2:
-                history.push("/mints");
+                history.push("/wallet");
                 break;
             case 3:
                 history.push("/treasury");

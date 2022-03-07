@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import "./dashboard.scss";
-import { IReduxState } from "../../store/slices/state.interface";
-import { IAppSlice } from "../../store/slices/app-slice";
 import Box from "@mui/material/Box";
 import PalmCard from "../../components/PalmCard/PalmCard";
 import Typography from "@mui/material/Typography";
@@ -14,8 +12,6 @@ import PalmTable from "../../components/PalmTable/PalmTable";
 import { PalmTableData, ColumnData } from "../../components/PalmTable/PalmTableInterface";
 
 function Dashboard() {
-    const app = useSelector<IReduxState, IAppSlice>(state => state.app);
-
     const useStyles = makeStyles(() => ({
         ul: {
             "& .MuiPaginationItem-root": {
