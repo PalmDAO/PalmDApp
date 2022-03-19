@@ -14,7 +14,12 @@ import PalmTabs from "src/components/PalmTabs/PalmTabs";
 import PalmButton from "src/components/PalmButton/PalmButton";
 import { createProposal } from "./Proposals.service";
 import { ethers, utils } from "ethers";
-import { governorAbi, tokenAbi } from "./proposals.abi";
+import { PalmContract, WhaleContract } from "../../abi";
+import { getAddresses, Networks } from "../../constants";
+import PalmDialog from "../../components/PalmDialog";
+import PalmChipInput from "../../components/PalmChipInput";
+import { getTopCoinsByMarketCap } from "../../helpers/token-price";
+
 let Web3 = require("web3");
 let web3 = new Web3(Web3.givenProvider);
 
@@ -27,16 +32,19 @@ const createFilteredProposals = (proposals: any[]) => {
 };
 
 export default function Proposals() {
+    const addresses = getAddresses(Networks.ETH);
     const [value, setValue] = React.useState(0);
     const [page, setPage] = React.useState(1);
     const initialProposals: any[] = [];
     const [proposals, setProposals] = React.useState(initialProposals);
     const [filteredProposals, setFilteredProposals] = React.useState(initialProposals);
     const [paginatorData, setPageData] = React.useState({ amountOfPages: 0, pageFirstIndex: 0, pageSecondIndex: 0 });
+    getTopCoinsByMarketCap();
 
     const provider = ethers.providers.getDefaultProvider("http://127.0.0.1:9545");
-    const governorAddress = "0xED74b8F16502D1165F52cD1545F0484B733591f8";
-    let whaleGovernor = new web3.eth.Contract(JSON.parse(governorAbi), governorAddress);
+    const governorAddress = addresses.WHALE_GOVERNOR_ADDRESS;
+
+    let whaleGovernor = new web3.eth.Contract(WhaleContract, governorAddress);
     //Any new, incoming events
     whaleGovernor.events
         .ProposalCreated({}, () => console.log("Received proposal creation"))
@@ -156,15 +164,19 @@ export default function Proposals() {
         setPage(value);
     };
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        // createProposal()
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const classes = useStyles();
 
     const columnHeaders: ColumnData = { proposal: "Proposal", votes: "Votes" };
-
-    // const amountOfPages = Math.ceil(cellData.length / 10);
-    // const pageFirstIndex = (page - 1) * 10 + 1;
-    // const pageSecondIndex = Math.min(page * 10, cellData.length);
-
-    // filteredProposals = cellData.slice(pageFirstIndex - 1, pageSecondIndex);
 
     const card = (
         <React.Fragment>
@@ -190,7 +202,10 @@ export default function Proposals() {
     return (
         <Stack spacing={2}>
             <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <PalmButton onClick={() => createProposal()}>Create Proposal</PalmButton>
+                <PalmButton onClick={handleClickOpen}>Create Proposal</PalmButton>
+                <PalmDialog onClose={handleClose} open={open}>
+                    <PalmChipInput></PalmChipInput>
+                </PalmDialog>
             </Box>
             <PalmCard>{card}</PalmCard>
         </Stack>

@@ -2,12 +2,11 @@ import axios from "axios";
 
 const cache: { [key: string]: number } = {};
 
-export const loadTokenPrices = async () => {
-    const url = "https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2,olympus,magic-internet-money&vs_currencies=usd";
+export const getTopCoinsByMarketCap = async () => {
+    const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc";
     const { data } = await axios.get(url);
 
-    cache["AVAX"] = data["avalanche-2"].usd;
-    cache["MIM"] = data["magic-internet-money"].usd;
+    console.log("top coins", data);
 };
 
 export const getTokenPrice = (symbol: string): number => {

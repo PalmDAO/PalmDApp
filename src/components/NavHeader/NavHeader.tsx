@@ -6,18 +6,36 @@ import Container from "@mui/material/Container";
 import "./NavHeader.scss";
 import { ReactComponent as PalmDaoLogo } from "../../assets/icons/palm-dao-logo.svg";
 import PalmTabs from "../PalmTabs/PalmTabs";
-import ConnectButton from "../Header/connect-button";
+import ConnectButton from "../connect-button";
 import { useHistory } from "react-router-dom";
 
+function getPath(path: string) {
+    return path.replace(/^\//, "");
+}
+
+function getTabValue(path: string) {
+    switch (getPath(path)) {
+        case "overview":
+            return 0;
+        case "proposals":
+            return 1;
+        case "wallet":
+            return 2;
+        case "treasury":
+            return 3;
+        default:
+            return 1;
+    }
+}
+
 const NavHeader = () => {
-    const [value, setValue] = React.useState(1);
     const history = useHistory();
+    const [value, setValue] = React.useState(getTabValue(history.location.pathname));
 
     function handleChange(event: React.SyntheticEvent, newValue: number) {
-        console.log(newValue);
         switch (newValue) {
             case 0:
-                history.push("/dashboard");
+                history.push("/overview");
                 break;
             case 1:
                 history.push("/proposals");
@@ -31,9 +49,15 @@ const NavHeader = () => {
             default:
                 break;
         }
-        console.log("handleChange", newValue);
         setValue(newValue);
     }
+
+    React.useEffect(() => {
+        const unlisten = history.listen(location => {
+            setValue(getTabValue(location.pathname));
+        });
+        return unlisten;
+    }, []);
 
     return (
         <AppBar color="transparent" className="palm-appbar" position="static">

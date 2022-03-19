@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./view-base.scss";
-import Header from "../Header";
 import { Hidden, makeStyles, useMediaQuery } from "@material-ui/core";
 import { DRAWER_WIDTH, TRANSITION_DURATION } from "../../constants/style";
 import Messages from "../Messages";
