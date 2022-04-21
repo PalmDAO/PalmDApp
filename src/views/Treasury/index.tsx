@@ -2,7 +2,7 @@ import { Stack, Typography, Box, Divider, Pagination } from "@mui/material";
 import * as React from "react";
 import PalmCard from "../../components/PalmCard/PalmCard";
 import PalmTable from "../../components/PalmTable/PalmTable";
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import { ColumnData, PalmTableData } from "src/components/PalmTable/PalmTableInterface";
 import "./Treasury.scss";
 import { getTransactions } from "./Treasury.service";
@@ -72,6 +72,9 @@ function Treasury() {
 
     return (
         <Stack spacing={2}>
+            <Typography sx={{ color: "white", fontWeight: "bold", flexGrow: "1" }} variant="h4">
+                Treasury
+            </Typography>
             <Box sx={{ display: "flex" }}>
                 <PalmCard>
                     <Box sx={{ mx: "12px", my: "12px" }}>ETH 500.0</Box>

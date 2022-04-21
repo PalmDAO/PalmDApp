@@ -1,13 +1,13 @@
 {
     "env": {
-        "browser": true
+        "browser": true,
+        "node": true
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "sourceType": "module",
-        "project": "./tsconfig.json",
+        "project": "tsconfig.json",
         "tsconfigRootDir": "./"
-    },
+     },
     "extends": [
         "plugin:prettier/recommended", 
         "prettier/react", 

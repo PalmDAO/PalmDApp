@@ -1,26 +1,25 @@
 import React, { useState, forwardRef, useCallback } from "react";
 import classnames from "classnames";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core";
 import { useSnackbar, SnackbarContent } from "notistack";
-import Collapse from "@material-ui/core/Collapse";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Collapse from "@mui/material/Collapse";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Message } from "../../store/slices/messages-slice";
-import WarningIcon from "@material-ui/icons/Warning";
-import ErrorIcon from "@material-ui/icons/Error";
-import InfoIcon from "@material-ui/icons/Info";
-import SuccessIcon from "@material-ui/icons/CheckCircle";
-import { Color } from "@material-ui/lab/Alert";
+import WarningIcon from "@mui/icons-material/Warning";
+import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
+import SuccessIcon from "@mui/icons-material/CheckCircle";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const useStyles = makeStyles(theme => ({
+const useStyles: any = makeStyles(theme => ({
     root: {
         [theme.breakpoints.up("sm")]: {
             minWidth: "344px !important",
@@ -31,20 +30,24 @@ const useStyles = makeStyles(theme => ({
         width: "100%",
     },
     error: {
-        backgroundColor: "#d32f2f",
+        "&.MuiPaper-rounded.MuiPaper-elevation1": {
+            backgroundColor: "#d32f2f",
+        },
     },
     info: {
-        backgroundColor: "#2979ff",
+        "&.MuiPaper-rounded.MuiPaper-elevation1": {
+            backgroundColor: "#2979ff",
+        },
     },
     warning: {
-        backgroundColor: "#ffa000",
+        "&.MuiPaper-rounded.MuiPaper-elevation1": {
+            backgroundColor: "#ffa000",
+        },
     },
     success: {
-        backgroundColor: "#43a047",
-    },
-    typography: {
-        color: "#FFFFFF",
-        fontFamily: "Roboto-Medium",
+        "&.MuiPaper-rounded.MuiPaper-elevation1": {
+            backgroundColor: "#43a047",
+        },
     },
     actionRoot: {
         padding: "8px 8px 8px 16px",
@@ -60,7 +63,9 @@ const useStyles = makeStyles(theme => ({
         transition: theme.transitions.create("transform", {
             duration: theme.transitions.duration.shortest,
         }),
-        color: "#FFFFFF",
+        "&.MuiIconButton-sizeMedium": {
+            color: "#FFFFFF",
+        },
     },
     expandOpen: {
         transform: "rotate(180deg)",
@@ -107,7 +112,7 @@ const SnackMessage = forwardRef<HTMLDivElement, { id: string | number; message: 
         closeSnackbar(props.id);
     }, [props.id, closeSnackbar]);
 
-    const getIcon = (severity: Color) => {
+    const getIcon = (severity: string) => {
         switch (severity) {
             case "error":
                 return <ErrorIcon color="inherit" />;
@@ -127,7 +132,7 @@ const SnackMessage = forwardRef<HTMLDivElement, { id: string | number; message: 
             <Card className={classnames(classes.card, classes[props.message.severity])}>
                 <CardActions classes={{ root: classes.actionRoot }}>
                     {getIcon(props.message.severity)}
-                    <Typography variant="subtitle2" className={classes.typography}>
+                    <Typography sx={{ marginLeft: "0.5rem", opacity: "0.9" }} variant="subtitle2" className={classes.typography}>
                         {props.message.text}
                     </Typography>
                     <div className={classes.icons}>
@@ -141,7 +146,7 @@ const SnackMessage = forwardRef<HTMLDivElement, { id: string | number; message: 
                         </IconButton>
                     </div>
                 </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Collapse in={expanded} timeout={5000000} unmountOnExit>
                     <Paper className={classes.collapse}>
                         <CopyToClipboard text={JSON.stringify(props.message.error)} onCopy={() => setIsCopy(true)}>
                             <Button size="small" className={classes.button}>

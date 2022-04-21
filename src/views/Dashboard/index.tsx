@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import PalmTable from "../../components/PalmTable/PalmTable";
 import { PalmTableData, ColumnData } from "../../components/PalmTable/PalmTableInterface";
 
@@ -78,7 +78,14 @@ function Dashboard() {
         </React.Fragment>
     );
 
-    return <PalmCard>{card}</PalmCard>;
+    return (
+        <Stack spacing={2}>
+            <Typography sx={{ color: "white", fontWeight: "bold", flexGrow: "1", marginLeft: "1rem" }} variant="h4">
+                Overview
+            </Typography>
+            <PalmCard>{card}</PalmCard>;
+        </Stack>
+    );
 }
 
 export default Dashboard;
