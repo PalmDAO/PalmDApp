@@ -16,6 +16,7 @@ import { Box, Typography } from "@mui/material";
 interface IPalmTableProps {
     tableData: PalmTableData[];
     columns: ColumnData;
+    onRowClicked?: (row: PalmTableData) => void;
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -36,13 +37,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:last-child td, &:last-child th": {
         border: 0,
     },
+
+    [`&.MuiTableRow-hover:hover`]: {
+        backgroundColor: "rgba(255, 255, 255, 0.06)",
+        cursor: "pointer",
+    },
+
+    [`&.MuiTableRow-hover:nth-of-type(even):hover`]: {
+        backgroundColor: "rgba(0, 0, 0, 0.40)",
+        cursor: "pointer",
+    },
 }));
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-}
-
-export default function PalmTable({ tableData, columns }: IPalmTableProps) {
+export default function PalmTable({ tableData, columns, onRowClicked = () => null }: IPalmTableProps) {
     return (
         <TableContainer sx={{ borderRadius: "0px" }} elevation={0} component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -55,7 +62,7 @@ export default function PalmTable({ tableData, columns }: IPalmTableProps) {
                 </TableHead>
                 <TableBody>
                     {tableData.map(row => (
-                        <StyledTableRow>
+                        <StyledTableRow hover onClick={() => onRowClicked(row)}>
                             {Object.keys(columns).map((column, index) =>
                                 (row.data[column] as CellObject)?.component === "progress" ? (
                                     <StyledTableCell key={index} component="th" scope="row">

@@ -1,6 +1,8 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,14 +11,16 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(
+    ({ theme }) => `
     "& .MuiDialogContent-root": {
-        padding: theme.spacing(10),
+        padding: ${theme.spacing(10)},
     },
     "& .MuiDialogActions-root": {
-        padding: theme.spacing(1),
+        padding: ${theme.spacing(1)},
     },
-}));
+`,
+);
 
 export interface DialogTitleProps {
     id: string;
@@ -57,15 +61,22 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 export default function PalmDialog({ children, onClose, open }: DialogProps) {
     return (
         <BootstrapDialog onClose={onClose} aria-labelledby="customized-dialog-title" open={open}>
-            <BootstrapDialogTitle id="customized-dialog-title" onClose={onClose}>
-                Create Proposal
-            </BootstrapDialogTitle>
-            <DialogContent dividers>{children}</DialogContent>
-            <DialogActions>
-                <Button autoFocus onClick={onClose}>
-                    Done
-                </Button>
-            </DialogActions>
+            <AppBar sx={{ position: "relative" }}>
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        Sound
+                    </Typography>
+                    <Button autoFocus color="inherit" onClick={onClose}>
+                        save
+                    </Button>
+                </Toolbar>
+            </AppBar>
+            <DialogContent sx={{ width: "100%" }} dividers>
+                {children}
+            </DialogContent>
         </BootstrapDialog>
     );
 }

@@ -5,7 +5,7 @@ import { DEFAULT_NETWORK } from "../../constants";
 import { IReduxState } from "../../store/slices/state.interface";
 import { IPendingTxn } from "../../store/slices/pending-txns-slice";
 import "./connect-menu.scss";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function ConnectMenu() {
     const { connect, disconnect, connected, web3, providerChainID, checkWrongNetwork } = useWeb3Context();

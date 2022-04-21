@@ -3,7 +3,7 @@ export interface PalmTableData {
 }
 
 export interface CellData {
-    [key: string]: CellObject | string;
+    [key: string]: CellObject | string | any;
 }
 
 export interface CellObject {

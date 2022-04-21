@@ -1,7 +1,8 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
+import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import "./NavHeader.scss";
 import { ReactComponent as PalmDaoLogo } from "../../assets/icons/palm-dao-logo.svg";
@@ -14,6 +15,7 @@ function getPath(path: string) {
 }
 
 function getTabValue(path: string) {
+    console.log(path);
     switch (getPath(path)) {
         case "overview":
             return 0;
@@ -24,11 +26,34 @@ function getTabValue(path: string) {
         case "treasury":
             return 3;
         default:
-            return 1;
+            return null;
     }
 }
 
-const NavHeader = () => {
+const drawerWidth = 300;
+
+interface AppBarProps extends MuiAppBarProps {
+    open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: prop => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+    transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(["margin", "width"], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: drawerWidth,
+    }),
+}));
+
+const NavHeader = (props: AppBarProps) => {
     const history = useHistory();
     const [value, setValue] = React.useState(getTabValue(history.location.pathname));
 
@@ -54,13 +79,16 @@ const NavHeader = () => {
 
     React.useEffect(() => {
         const unlisten = history.listen(location => {
-            setValue(getTabValue(location.pathname));
+            const value = getTabValue(location.pathname);
+            if (value !== null) {
+                setValue(value);
+            }
         });
         return unlisten;
     }, []);
 
     return (
-        <AppBar color="transparent" className="palm-appbar" position="static">
+        <AppBar {...props} color="transparent" className="palm-appbar" position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <PalmDaoLogo></PalmDaoLogo>

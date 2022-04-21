@@ -30,9 +30,11 @@ export const loadAppDetails = createAsyncThunk(
 
 const initialState = {
     loading: true,
+    showDrawer: false,
 };
 
 export interface IAppSlice {
+    showDrawer: boolean;
     loading: boolean;
     marketPrice: number;
     marketCap: number;
@@ -48,6 +50,9 @@ const appSlice = createSlice({
     reducers: {
         fetchAppSuccess(state, action) {
             setAll(state, action.payload);
+        },
+        toggleDrawer(state) {
+            state.showDrawer = !state.showDrawer;
         },
     },
     extraReducers: builder => {
@@ -70,6 +75,6 @@ const baseInfo = (state: RootState) => state.app;
 
 export default appSlice.reducer;
 
-export const { fetchAppSuccess } = appSlice.actions;
+export const { fetchAppSuccess, toggleDrawer } = appSlice.actions;
 
 export const getAppState = createSelector(baseInfo, app => app);

@@ -8,7 +8,7 @@ import { IReduxState } from "../store/slices/state.interface";
 import Loading from "../components/Loader";
 import ViewBase from "../components/ViewBase";
 
-import { Proposals, Wallet, Dashboard, NotFound, Treasury } from "../views";
+import { Proposals, Wallet, Dashboard, NotFound, Treasury, ViewProposal } from "../views";
 import "./style.scss";
 
 function App() {
@@ -79,8 +79,6 @@ function App() {
         }
     }, [connected]);
 
-    if (isAppLoading) return <Loading />;
-
     return (
         <ViewBase>
             <Switch>
@@ -91,6 +89,8 @@ function App() {
                 <Route exact path="/">
                     <Redirect to="/proposals" />
                 </Route>
+
+                <Route path="/proposals/:id" children={<ViewProposal />}></Route>
 
                 <Route path="/proposals">
                     <Proposals />

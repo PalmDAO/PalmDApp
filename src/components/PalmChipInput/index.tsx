@@ -1,37 +1,34 @@
-import * as React from "react";
-import { Theme, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import React, { useState, useEffect } from "react";
 import Chip from "@mui/material/Chip";
-import MultiSelectUnstyled, { MultiSelectUnstyledProps } from "@mui/base/MultiSelectUnstyled";
+import Avatar from "@mui/material/Avatar";
+import SelectUnstyled, { SelectUnstyledProps, SelectOption } from "@mui/base/SelectUnstyled";
 import { selectUnstyledClasses } from "@mui/base/SelectUnstyled";
 import OptionUnstyled, { optionUnstyledClasses } from "@mui/base/OptionUnstyled";
 import PopperUnstyled from "@mui/base/PopperUnstyled";
 import { styled } from "@mui/system";
+import { useSelector } from "react-redux";
+import { IProposalAssets, addAsset } from "../../store/slices/proposal-creation-slice";
+import { IReduxState } from "../../store/slices/state.interface";
 
-const blue = {
-    100: "#DAECFF",
-    200: "#99CCF3",
-    400: "#3399FF",
-    500: "#007FFF",
-    600: "#0072E5",
-    900: "#003A75",
+const green = {
+    100: "#B6F6EB",
+    200: "#80EFDD",
+    400: "#49E9CE",
+    500: "var(--palm-primary)",
+    600: "var(--palm-primary-dark)",
+    900: "var(--palm-primary-darkest)",
 };
 
 const grey = {
-    100: "#E7EBF0",
-    200: "#E0E3E7",
-    300: "#CDD2D7",
-    400: "#B2BAC2",
-    500: "#A0AAB4",
-    600: "#6F7E8C",
-    700: "#3E5060",
-    800: "#2D3843",
-    900: "#1A2027",
+    100: "#DBE6E4",
+    200: "#CFDEDB",
+    300: "#B7CDC9",
+    400: "#93B4AE",
+    500: "#79A29B",
+    600: "#5C847E",
+    700: "#43605C",
+    800: "#2A3C3A",
+    900: "#192423",
 };
 
 const StyledButton = styled("button")(
@@ -39,14 +36,15 @@ const StyledButton = styled("button")(
     font-family: IBM Plex Sans, sans-serif;
     font-size: 0.875rem;
     box-sizing: border-box;
+    height: 40px;
     min-height: calc(1.5em + 22px);
-    min-width: 320px;
+    min-width: 105px;
     background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
     border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[300]};
     border-radius: 0.75em;
     margin: 0.5em;
-    padding: 10px;
     text-align: left;
+    margin-left: 0;
     line-height: 1.5;
     color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
   
@@ -56,7 +54,7 @@ const StyledButton = styled("button")(
     }
   
     &.${selectUnstyledClasses.focusVisible} {
-      outline: 3px solid ${theme.palette.mode === "dark" ? blue[600] : blue[100]};
+      outline: 3px solid ${theme.palette.mode === "dark" ? green[600] : green[100]};
     }
   
     &.${selectUnstyledClasses.expanded} {
@@ -68,6 +66,7 @@ const StyledButton = styled("button")(
     &::after {
       content: '▾';
       float: right;
+      line-height: 32px;
     }
     `,
 );
@@ -79,7 +78,8 @@ const StyledListbox = styled("ul")(
     box-sizing: border-box;
     padding: 5px;
     margin: 10px 0;
-    min-width: 320px;
+    min-width: 105px;
+    height: 200px;
     background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
     border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[300]};
     border-radius: 0.75em;
@@ -101,8 +101,8 @@ const StyledOption = styled(OptionUnstyled)(
     }
   
     &.${optionUnstyledClasses.selected} {
-      background-color: ${theme.palette.mode === "dark" ? blue[900] : blue[100]};
-      color: ${theme.palette.mode === "dark" ? blue[100] : blue[900]};
+      background-color: ${theme.palette.mode === "dark" ? green[900] : green[100]};
+      color: ${theme.palette.mode === "dark" ? green[100] : green[900]};
     }
   
     &.${optionUnstyledClasses.highlighted} {
@@ -111,8 +111,8 @@ const StyledOption = styled(OptionUnstyled)(
     }
   
     &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
-      background-color: ${theme.palette.mode === "dark" ? blue[900] : blue[100]};
-      color: ${theme.palette.mode === "dark" ? blue[100] : blue[900]};
+      background-color: ${theme.palette.mode === "dark" ? green[900] : green[100]};
+      color: ${theme.palette.mode === "dark" ? green[100] : green[900]};
     }
   
     &.${optionUnstyledClasses.disabled} {
@@ -128,18 +128,12 @@ const StyledOption = styled(OptionUnstyled)(
 
 const StyledPopper = styled(PopperUnstyled)`
     z-index: 1;
-    position: absolute;
-    backround: red;
-
-    &.MuiSelectUnstyled-popper {
-        position: fixed !important;
-        z-index: 999999;
-    }
 `;
 
 const Popper = (props: any) => {
     return (
         <StyledPopper
+            onKeyPress={e => console.log(e)}
             modifiers={{
                 preventOverflow: {
                     // tried these individually and in various combinations:
@@ -155,70 +149,53 @@ const Popper = (props: any) => {
     );
 };
 
-const CustomMultiSelect = React.forwardRef(function CustomMultiSelect(props: MultiSelectUnstyledProps<number>, ref: React.ForwardedRef<any>) {
-    const components: MultiSelectUnstyledProps<number>["components"] = {
+const CustomSelect = React.forwardRef(function CustomSelect(props: SelectUnstyledProps<number>, ref: React.ForwardedRef<any>) {
+    const components: SelectUnstyledProps<number>["components"] = {
         Root: StyledButton,
         Listbox: StyledListbox,
         Popper,
         ...props.components,
     };
 
-    return <MultiSelectUnstyled {...props} ref={ref} components={components} />;
+    return <SelectUnstyled {...props} ref={ref} components={components} />;
 });
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
-const names = ["BTC", "ETH", "USDT", "BNB", "XRP", "LUNA", "SOL", "ADA", "DOT", "BUSD"];
-
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-    return {
-        fontWeight: personName.indexOf(name) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium,
-    };
+interface PalmChipInputProps {
+    onChange: (value: any, id: string) => void;
+    id: string;
+    coins: any[];
 }
 
-export default function PalmChipInput() {
-    const theme = useTheme();
-    const [personName, setPersonName] = React.useState<string[]>([]);
+export default function PalmChipInput({ onChange, id, coins }: PalmChipInputProps) {
+    const assets = useSelector<IReduxState, IProposalAssets[]>(state => {
+        return state.proposalCreation.assets;
+    });
 
-    const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a stringified value.
-            typeof value === "string" ? value.split(",") : value,
-        );
-    };
+    let [selectedCoin, setSelectedCoin] = useState({ name: "" });
+
+    const filteredCoins = coins.filter(coin => !assets.some(asset => asset.name === coin.name) || selectedCoin.name === coin.name);
+
+    console.log(selectedCoin);
 
     return (
         <div>
-            <CustomMultiSelect
-                // value={personName}
-                // onChange={handleChange}
-                renderValue={selected => {
-                    console.log(selected);
-                    return selected.map(obj => {
-                        return <Chip label={obj.value}></Chip>;
-                    });
+            <CustomSelect
+                onChange={(event: any) => onChange(event, id)}
+                renderValue={(option: SelectOption<any> | null) => {
+                    if (option == null) {
+                        return <Chip label={"Select"}></Chip>;
+                    } else {
+                        setSelectedCoin(option!.value);
+                        return <Chip avatar={<Avatar src={option.value.image} />} label={option.value.symbol.toUpperCase()}></Chip>;
+                    }
                 }}
-                // MenuProps={MenuProps}
             >
-                {names.map(name => (
-                    <StyledOption value={name}>
-                        <img style={{ marginRight: "1rem" }} width={20} height={20} src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"></img>
-                        {name}
+                {filteredCoins.map((coin: any) => (
+                    <StyledOption sx={{ display: "flex", alignItems: "center", gap: "1rem" }} value={coin}>
+                        <Chip avatar={<Avatar src={coin.image} />} label={coin.symbol.toUpperCase()}></Chip>
                     </StyledOption>
                 ))}
-            </CustomMultiSelect>
+            </CustomSelect>
         </div>
     );
 }

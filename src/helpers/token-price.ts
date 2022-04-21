@@ -7,6 +7,7 @@ export const getTopCoinsByMarketCap = async () => {
     const { data } = await axios.get(url);
 
     console.log("top coins", data);
+    return data;
 };
 
 export const getTokenPrice = (symbol: string): number => {
